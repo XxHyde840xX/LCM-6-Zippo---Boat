@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Defs>
+
+  <SoundDef>
+    <defName>ZVP_Sound_Flamethrower</defName>
+    <context>MapOnly</context>
+    <maxSimultaneous>1</maxSimultaneous>  
+    <subSounds>
+      <li> 
+        <grains>
+          <li Class="AudioGrain_Clip">
+            <clipPath>ZVP_Sound_Flamethrower</clipPath>
+          </li>
+        </grains>
+        <volumeRange>25~25</volumeRange>
+      </li>
+    </subSounds>
+  </SoundDef>
+
+</Defs>

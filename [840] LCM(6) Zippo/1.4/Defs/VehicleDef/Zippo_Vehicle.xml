@@ -1,0 +1,920 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Defs>
+
+  <Vehicles.VehicleBuildDef ParentName="ZVP_BaseVehicleBuild"><!-- 建築型態的載具，基本上與BuildingDef相同-->
+		<defName>ZVP_LCM_Zippo_Building</defName>
+		<label>LCM(6) Zippo</label>
+		<description>An old-time gunship with strong armor, eqipped with flamethrowers and a lot of machine guns and auto cannons.</description>
+		<graphicData>
+			<texPath>Zippo/vehicle</texPath>
+			<drawSize>(15,15)</drawSize>
+		</graphicData>	
+		<statBases> 		
+			<MaxHitPoints>500</MaxHitPoints>
+			<WorkToBuild>20000</WorkToBuild>
+			<Flammability>0.05</Flammability>
+		</statBases>
+		<terrainAffordanceNeeded>ShallowWater</terrainAffordanceNeeded>
+		<size>(5,15)</size>
+		<constructionSkillPrerequisite>7</constructionSkillPrerequisite>	
+		<costList>
+			<EngineHeavy>2</EngineHeavy>
+			<ComponentHeavyCasting>8</ComponentHeavyCasting>
+			<ComponentWheelTire>5</ComponentWheelTire>
+			<ComponentIndustrial>25</ComponentIndustrial>
+			<Steel>1000</Steel>
+			<Chemfuel>300</Chemfuel>
+		</costList>
+		<designationCategory>VF_Vehicles</designationCategory>	
+		<thingToSpawn>ZVP_LCM_Zippo</thingToSpawn>	<!-- 建造後生成的載具Kind,這是與建築唯一不一樣的-->
+	</Vehicles.VehicleBuildDef>
+
+	<!-- 載具本體 -->
+	<Vehicles.VehicleDef ParentName="ZVP_BaseVehicle">
+		<defName>ZVP_LCM_Zippo</defName>
+		<label>LCM(6) Zippo</label>
+		<description>An old-time gunship with strong armor, eqipped with flamethrowers and a lot of machine guns and auto cannons.</description>
+		<buildDef>ZVP_LCM_Zippo_Building</buildDef>
+		<graphicData>
+			<texPath>Zippo/vehicle</texPath>
+			<drawSize>(15,15)</drawSize>
+		</graphicData>
+		<size>(5,15)</size>
+		<fillPercent>1</fillPercent>
+		<vehicleCategory>Combat</vehicleCategory>
+		<vehicleType>Sea</vehicleType>
+		<statBases>
+			<ArmorRating_Blunt>0.45</ArmorRating_Blunt>
+			<ArmorRating_Sharp>0.80</ArmorRating_Sharp>
+			<Flammability>0</Flammability>
+			<MarketValue>12500</MarketValue>
+		</statBases>
+		<vehicleStats>
+			<Mass>18000</Mass>
+			<MoveSpeed>8</MoveSpeed>
+			<CargoCapacity>15000</CargoCapacity>
+			<RepairRate>0.2</RepairRate>
+		</vehicleStats>
+		<race>
+			<baseBodySize>10</baseBodySize>
+		</race>	
+		<properties>	<!-- 座位與功能 -->
+			<customRoadCosts AssignDefaults = "0.4"/>
+			<defaultBiomesImpassable>true</defaultBiomesImpassable>
+			<defaultTerrainImpassable>true</defaultTerrainImpassable>
+			<customTerrainCosts AllowTerrainWithTag="Water" PathCost="1"/>
+			<customBiomeCosts>
+				<li>
+					<key>Ocean</key>
+					<value>1</value>
+				</li>
+				<li>
+					<key>Lake</key>
+					<value>1</value>
+				</li>
+				</customBiomeCosts>
+			<worldSpeedMultiplier>1</worldSpeedMultiplier>
+			<winterSpeedMultiplier>1</winterSpeedMultiplier>
+			<vehicleJobLimitations>
+				<li>(RepairVehicle, 4)</li>
+			</vehicleJobLimitations>
+			<roles>
+				<li>
+					<key>driver</key>
+					<label>Captain</label>
+					<slots>6</slots>
+					<slotsToOperate>2</slotsToOperate>				
+					<handlingTypes>
+						<li>Movement</li>
+						<li>Turret</li>
+					</handlingTypes>
+					<turretIds>
+						<li>turretSideMGLeft</li>
+						<li>turretSideMGRight</li>
+					</turretIds>
+				</li>				
+				<li>
+					<key>gunnerMain</key>
+					<label>Gunner (Main turret)</label>
+					<slots>1</slots>
+					<slotsToOperate>1</slotsToOperate>			
+					<handlingTypes>Turret</handlingTypes>
+					<turretIds>
+						<li>turretMain</li>
+						<li>turretMainCoaxialMG</li>
+					</turretIds>
+				</li>
+				<li>
+					<key>gunnerFlamethrower</key>
+					<label>Gunner (Flamethrower)</label>
+					<slots>2</slots>
+					<slotsToOperate>1</slotsToOperate>			
+					<handlingTypes>Turret</handlingTypes>
+					<turretIds>
+						<li>turretFlamethrowerLeft</li>
+						<li>turretFlamethrowerRight</li>
+						<li>turretFlamethrowerLeftCoaxialMG</li>
+						<li>turretFlamethrowerRightCoaxialMG</li>
+					</turretIds>
+				</li>
+				<li>
+					<key>gunnerBackMG</key>
+					<label>Gunner (Rear MG turret)</label>
+					<slots>2</slots>
+					<slotsToOperate>1</slotsToOperate>			
+					<handlingTypes>Turret</handlingTypes>
+					<turretIds>
+						<li>turretBackMGLeft</li>
+						<li>turretBackMGRight</li>
+					</turretIds>
+				</li>
+				<li>
+					<key>gunnerAutoCannon</key>
+					<label>Gunner (Rear Autocannon turret)</label>
+					<slots>1</slots>
+					<slotsToOperate>1</slotsToOperate>			
+					<handlingTypes>Turret</handlingTypes>
+					<turretIds>
+						<li>turretAutoCannon</li>
+					</turretIds>
+				</li>
+			</roles>
+		</properties>	
+		<components>	<!-- 各種零件 -->
+		<!-- Internal mobile Part 內部驅動部件-->
+			<li><!--Engine 100-->
+				<key>EngineLeft</key>
+				<label>Left Engine</label>
+				<health>120</health>
+				<priorityStatEfficiency>true</priorityStatEfficiency>
+				<categories><li>MoveSpeed</li></categories>
+				<depth>Internal</depth>		
+				<reactors>
+					<li Class = "Vehicles.Reactor_Explosive">
+						<indicator>VF_Explosive</indicator>
+						<chance>0.25</chance>
+						<radius>3</radius>
+						<damageDef>Bomb</damageDef>
+					</li>
+				</reactors>			
+				<hitbox>
+					<cells>
+						<li>(-1, -4)</li>
+						<li>(-1, -5)</li>
+					</cells>
+				</hitbox>				
+			</li>
+			<li><!--Engine 100-->
+				<key>EngineRight</key>
+				<label>Right Engine</label>
+				<health>120</health>
+				<priorityStatEfficiency>true</priorityStatEfficiency>
+				<categories><li>MoveSpeed</li></categories>
+				<depth>Internal</depth>		
+				<reactors>
+					<li Class = "Vehicles.Reactor_Explosive">
+						<indicator>VF_Explosive</indicator>
+						<chance>0.25</chance>
+						<radius>3</radius>
+						<damageDef>Bomb</damageDef>
+					</li>
+				</reactors>			
+				<hitbox>
+					<cells>
+						<li>(1, -4)</li>
+						<li>(1, -5)</li>
+					</cells>
+				</hitbox>				
+			</li>			
+			<li><!-- fuel tank 100-->
+				<key>FuelTank</key>
+				<label>fuel tank</label>
+				<health>120</health>
+				<depth>Internal</depth>			
+				<reactors><li Class = "Vehicles.Reactor_FuelLeak"/></reactors>			
+				<hitbox>
+					<cells>
+						<li>(-1, -3)</li>
+						<li>(0, -3)</li>
+						<li>(1, -3)</li>
+						<li>(0, -4)</li>
+						<li>(0, -5)</li>
+					</cells>
+				</hitbox>
+			</li>
+			<li><!-- Gearbox 50-->
+				<key>DriveShaft</key>
+				<label>drive shaft</label>
+				<health>70</health>
+				<depth>Internal</depth>
+				<categories><li>MoveSpeed</li></categories>	
+				<hitbox>
+					<cells>
+						<li>(-1, -6)</li>
+						<li>(1, -6)</li>
+					</cells>
+				</hitbox>			
+			</li>
+			<li><!-- AmmoRack 50-->
+				<key>AmmoRackMain</key>
+				<label>main ammo rack</label>
+				<health>140</health>
+				<depth>Internal</depth>
+				<reactors>
+					<li Class = "Vehicles.Reactor_Explosive">
+						<indicator>VF_Explosive</indicator>
+						<chance>0.5</chance>
+						<radius>5</radius>
+						<damageDef>Bomb</damageDef>
+					</li>
+				</reactors>	
+				<hitbox>
+					<cells>
+						<li>(0, 3)</li>
+						<li>(0, 4)</li>
+					</cells>
+				</hitbox>
+			</li>
+			<li><!-- AmmoRack 50-->
+				<key>AmmoRackRear</key>
+				<label>rear ammo rack</label>
+				<health>70</health>
+				<depth>Internal</depth>
+				<reactors>
+					<li Class = "Vehicles.Reactor_Explosive">
+						<indicator>VF_Explosive</indicator>
+						<chance>0.3</chance>
+						<radius>3</radius>
+						<damageDef>Bomb</damageDef>
+					</li>
+				</reactors>	
+				<hitbox>
+					<cells>
+						<li>(0, -1)</li>
+						<li>(0, -2)</li>
+						<li>(0, -3)</li>
+						<li>(-1, -2)</li>
+						<li>(1, -2)</li>
+					</cells>
+				</hitbox>
+			</li>
+			<li><!-- AmmoRack 50-->
+				<key>AmmoRackFlamethrower</key>
+				<label>flamethrower fuel tank</label>
+				<health>70</health>
+				<depth>Internal</depth>
+				<reactors>
+					<li Class = "Vehicles.Reactor_Explosive">
+						<indicator>VF_Explosive</indicator>
+						<chance>0.1</chance>
+						<radius>8</radius>
+						<damageDef>Bomb</damageDef>
+					</li>
+				</reactors>	
+				<hitbox>
+					<cells>
+						<li>(-1, 1)</li>
+						<li>(-1, 2)</li>
+						<li>(1, 1)</li>
+						<li>(1, 2)</li>
+					</cells>
+				</hitbox>
+			</li>		
+		<!-- External mobile Part 外部驅動部件-->		
+			<li><!-- LeftTrack 150-->
+				<key>LeftProp</key>
+				<label>left propeller</label>
+				<health>175</health>
+				<depth>External</depth>
+				<categories><li>MoveSpeed</li></categories>
+				<tags><li>Wheel</li></tags>
+				<hitWeight>2</hitWeight>
+				<hitbox>
+					<cells>
+						<li>(-2, -7)</li>
+						<li>(-1, -7)</li>
+						<li>(0, -7)</li>
+					</cells>
+				</hitbox>
+			</li>
+			<li><!-- RightTrack 150-->
+				<key>RightProp</key>
+				<label>right propeller</label>
+				<health>175</health>
+				<depth>External</depth>
+				<categories><li>MoveSpeed</li></categories>	
+				<tags><li>Wheel</li></tags>
+				<hitWeight>2</hitWeight>
+				<hitbox>
+					<cells>
+						<li>(2, -7)</li>
+						<li>(1, -7)</li>
+						<li>(0, -7)</li>
+					</cells>
+				</hitbox>
+			</li>
+		<!-- External Platings 外部防禦部件 -->
+			<li><!-- FrontArmorPlating 200-->
+				<key>FrontArmorPlating</key>
+				<label>front armor Plating</label>
+				<health>400</health>
+				<depth>External</depth>
+				<hitWeight>4</hitWeight>	
+				<armor>
+					<ArmorRating_Blunt>1.00</ArmorRating_Blunt>
+					<ArmorRating_Sharp>0.8</ArmorRating_Sharp>
+				</armor>		
+				<hitbox><side>Front</side></hitbox>
+			</li>
+			<li><!-- LeftArmorPlating 180-->
+				<key>LeftArmorPlating</key>
+				<label>left armor plating</label>
+				<health>550</health>
+				<depth>External</depth>
+				<hitWeight>5</hitWeight>		
+				<armor>
+					<ArmorRating_Blunt>0.7</ArmorRating_Blunt>
+					<ArmorRating_Sharp>0.5</ArmorRating_Sharp>
+				</armor>			
+				<hitbox><side>Left</side></hitbox>
+			</li>
+			<li><!-- RightArmorPlating 180-->
+				<key>RightArmorPlating</key>
+				<label>right armor plating</label>
+				<health>550</health>
+				<depth>External</depth>
+				<hitWeight>5</hitWeight>	
+				<armor>
+					<ArmorRating_Blunt>0.7</ArmorRating_Blunt>
+					<ArmorRating_Sharp>0.5</ArmorRating_Sharp>
+				</armor>			
+				<hitbox><side>Right</side></hitbox>
+			</li>
+			<li><!-- LeftSkirtPlating 100-->
+				<key>LeftSkirtPlating</key>
+				<label>left skirt plating</label>
+				<health>200</health>
+				<depth>External</depth>
+				<hitWeight>10</hitWeight>		
+				<armor>
+					<ArmorRating_Blunt>0.5</ArmorRating_Blunt>
+					<ArmorRating_Sharp>0.5</ArmorRating_Sharp>
+				</armor>			
+				<hitbox><side>Left</side></hitbox>
+			</li>
+			<li><!-- RightSkirtPlating 100-->
+				<key>RightSkirtPlating</key>
+				<label>right skirt plating</label>
+				<health>200</health>
+				<depth>External</depth>
+				<hitWeight>10</hitWeight>	
+				<armor>
+					<ArmorRating_Blunt>0.5</ArmorRating_Blunt>
+					<ArmorRating_Sharp>0.5</ArmorRating_Sharp>
+				</armor>			
+				<hitbox><side>Right</side></hitbox>
+			</li>
+			<li><!-- RoofArmorPlating 150 -->
+				<key>RoofArmorPlating</key>
+				<label>roof armor plating</label>
+				<health>200</health>
+				<depth>External</depth>
+				<hitWeight>5</hitWeight>
+				<armor>
+					<ArmorRating_Blunt>0.9</ArmorRating_Blunt>
+					<ArmorRating_Sharp>0.7</ArmorRating_Sharp>
+				</armor>
+			</li>
+			<li><!-- BackArmorPlating 150-->
+				<key>BackArmorPlating</key>
+				<label>rear armor plating</label>
+				<health>250</health>
+				<depth>External</depth>
+				<hitWeight>5</hitWeight>
+				<hitbox>
+					<side>Back</side>
+				</hitbox>
+			</li>
+			<li><!-- RoofArmorPlating 150 -->
+				<key>ArmoredBridge</key>
+				<label>Armored bridge</label>
+				<health>400</health>
+				<depth>External</depth>
+				<hitWeight>12</hitWeight>
+				<armor>
+					<ArmorRating_Blunt>0.7</ArmorRating_Blunt>
+					<ArmorRating_Sharp>0.5</ArmorRating_Sharp>
+				</armor>
+			</li>
+		</components>
+		<comps>
+			<li Class="Vehicles.CompProperties_FueledTravel">	<!-- 油箱與油耗 -->
+				<fuelType>Chemfuel</fuelType>
+				<leakDef>Filth_Fuel</leakDef>
+				<fuelConsumptionRate>15</fuelConsumptionRate>
+				<fuelConsumptionWorldMultiplier>1</fuelConsumptionWorldMultiplier>
+				<fuelCapacity>600</fuelCapacity>
+			</li>
+			<li Class="Vehicles.CompProperties_VehicleTurrets">	<!-- 砲塔，turretDef写的是炮塔武器的defname -->
+				<turrets>
+					<li><!--主炮塔-->	
+						<turretDef>ZVP_Zippo_turretMain</turretDef>					
+						<renderProperties>
+							<north>(0, 3.75)</north>
+							<south>(0, -3.6)</south>
+							<east>(3.75, 0.15)</east>
+							<west>(-3.75, 0.15)</west>
+						</renderProperties>
+						<gizmoLabel>Main turret</gizmoLabel>
+						<aimPieOffset>(0, 0)</aimPieOffset>	<!-- 預熱指示器的x,z偏移 -->
+						<angleRestricted>(197,163)</angleRestricted>
+						<drawLayer>1</drawLayer>						
+						<key>turretMain</key>
+					</li>
+					<li><!--主炮同轴機槍-->	
+                        <turretDef>ZVP_Zippo_turretBackMG</turretDef>
+                        <renderProperties><!--這裡的坐標系是無視旋轉的,所以x就是恆定左右偏移-->	
+                            <north>(0.4,0.5)</north>
+                            <south>(-0.4,-0.5)</south>
+                            <east>(-0.5,0.4)</east>
+                            <west>(0.5,-0.4)</west>
+                        </renderProperties>
+                        <gizmoLabel>Main turret coaxial MG</gizmoLabel>
+                        <angleRestricted>(330,30)</angleRestricted>
+                        <aimPieOffset>(0, 0)</aimPieOffset>
+                        <key>turretMainCoaxialMG</key>
+						<drawLayer>-1</drawLayer>					
+                        <parentKey>turretMain</parentKey>
+                    </li>
+
+					<li><!--左喷火器-->	
+                        <turretDef>ZVP_Zippo_turretFlamethrower</turretDef>
+                        <renderProperties><!--這裡的坐標系是無視旋轉的,所以x就是恆定左右偏移-->	
+                            <north>(-0.75,2)</north>
+                            <south>(0.75,-1.75)</south>
+                            <east>(1.9,0.9)</east>
+                            <west>(-1.9,-0.6)</west>
+                        </renderProperties>
+                        <gizmoLabel>Left flamethrower turret</gizmoLabel>
+                        <aimPieOffset>(-0.1, 0)</aimPieOffset>
+                        <key>turretFlamethrowerLeft</key>
+						<angleRestricted>(195,140)</angleRestricted>
+						<drawLayer>1</drawLayer>
+                    </li>
+					<li><!--左喷火器同轴-->	
+                        <turretDef>ZVP_Zippo_turretSideMG</turretDef>
+                        <renderProperties>
+                            <north>(0.25,0.1)</north>
+                            <south>(-0.25,-0.1)</south>
+                            <east>(-0.1,-0.25)</east>
+                            <west>(0.1,0.25)</west>
+                        </renderProperties>
+                        <gizmoLabel>Left flamethrower turret coaxial MG</gizmoLabel>
+                        <angleRestricted>(340,20)</angleRestricted>
+                        <aimPieOffset>(0, 0)</aimPieOffset>
+                        <key>turretFlamethrowerLeftCoaxialMG</key>
+						<drawLayer>-1</drawLayer>					
+                        <parentKey>turretFlamethrowerLeft</parentKey>
+                    </li>
+
+					<li><!--右喷火器-->	
+                        <turretDef>ZVP_Zippo_turretFlamethrower</turretDef>
+                        <renderProperties><!--這裡的坐標系是無視旋轉的,所以x就是恆定左右偏移-->	
+                            <north>(0.75,2)</north>
+                            <south>(-0.75,-1.75)</south>
+                            <east>(1.9,-0.6)</east>
+                            <west>(-1.9,0.9)</west>
+                        </renderProperties>
+                        <gizmoLabel>Right flamethrower turret</gizmoLabel>
+                        <aimPieOffset>(-0.1, 0)</aimPieOffset>
+                        <key>turretFlamethrowerRight</key>
+						<angleRestricted>(220,165)</angleRestricted>
+						<drawLayer>1</drawLayer>
+                    </li>
+					<li><!--右喷火器同轴-->	
+                        <turretDef>ZVP_Zippo_turretSideMG</turretDef>
+                        <renderProperties>
+                            <north>(0.25,0.1)</north>
+                            <south>(-0.25,-0.1)</south>
+                            <east>(-0.1,-0.25)</east>
+                            <west>(0.1,0.25)</west>
+                        </renderProperties>
+                        <gizmoLabel>Right flamethrower turret coaxial MG</gizmoLabel>
+                        <angleRestricted>(340,20)</angleRestricted>
+                        <aimPieOffset>(0, 0)</aimPieOffset>
+                        <key>turretFlamethrowerRightCoaxialMG</key>
+						<drawLayer>-1</drawLayer>					
+                        <parentKey>turretFlamethrowerRight</parentKey>
+                    </li>
+				
+					<li><!--左侧面机枪-->	
+                        <turretDef>ZVP_Zippo_turretSideMG</turretDef>
+                        <renderProperties>
+                            <north>(-0.5,-1)</north>
+                            <south>(0.5,1.6)</south>
+                            <east>(-1.5,1.3)</east>
+                            <west>(1.5,0.1)</west>
+                        </renderProperties>
+                        <gizmoLabel>Left side MG</gizmoLabel>
+                        <angleRestricted>(195,5)</angleRestricted>
+                        <aimPieOffset>(0, 0)</aimPieOffset>
+                        <key>turretSideMGLeft</key>
+						<drawLayer>1</drawLayer>
+                    </li>
+					<li><!--右侧面机枪-->	
+                        <turretDef>ZVP_Zippo_turretSideMG</turretDef>
+                        <renderProperties>
+                            <north>(0.5,-1)</north>
+                            <south>(-0.5,1.6)</south>
+                            <east>(-1.5,0.1)</east>
+                            <west>(1.5,1.3)</west>
+                        </renderProperties>
+                        <gizmoLabel>Right side MG</gizmoLabel>
+                        <angleRestricted>(355,165)</angleRestricted>
+                        <aimPieOffset>(0, 0)</aimPieOffset>
+                        <key>turretSideMGRight</key>
+						<drawLayer>1</drawLayer>
+                    </li>
+
+					<li><!--左机枪塔-->	
+                        <turretDef>ZVP_Zippo_turretBackMG</turretDef>
+                        <renderProperties>
+                            <north>(-0.7,-2.1)</north>
+                            <south>(0.7,2.75)</south>
+                            <east>(-2.45,1.2)</east>
+                            <west>(2.45,-0.1)</west>
+                        </renderProperties>
+                        <gizmoLabel>Left rear MG turret</gizmoLabel>
+                        <angleRestricted>(183,353)</angleRestricted>
+                        <aimPieOffset>(0, 0)</aimPieOffset>
+                        <key>turretBackMGLeft</key>
+						<drawLayer>1</drawLayer>
+                    </li>
+					<li><!--右机枪塔-->	
+                        <turretDef>ZVP_Zippo_turretBackMG</turretDef>
+                        <renderProperties>
+                            <north>(0.7,-2.1)</north>
+                            <south>(-0.7,2.75)</south>
+                            <east>(-2.45,-0.1)</east>
+                            <west>(2.45,1.2)</west>
+                        </renderProperties>
+                        <gizmoLabel>Right rear MG turret</gizmoLabel>
+                        <angleRestricted>(7,177)</angleRestricted>
+                        <aimPieOffset>(0, 0)</aimPieOffset>
+                        <key>turretBackMGRight</key>
+						<drawLayer>1</drawLayer>
+                    </li>
+
+					<li><!--后部机炮-->	
+                        <turretDef>ZVP_Zippo_turretAutoCannon</turretDef>
+                        <renderProperties>
+                            <north>(0,-2.95)</north>
+                            <south>(0,3.7)</south>
+                            <east>(-3.4,0.7)</east>
+                            <west>(3.4,0.7)</west>
+                        </renderProperties>
+                        <gizmoLabel>Autocannon turret</gizmoLabel>
+                        <aimPieOffset>(0, 0)</aimPieOffset>
+                        <key>turretAutoCannon</key>
+						<drawLayer>1</drawLayer>
+                    </li>
+				</turrets>
+			</li>
+		</comps>
+	</Vehicles.VehicleDef>
+		<!-- 主炮塔 -->
+		<Vehicles.VehicleTurretDef ParentName="ZVP_BaseTurret">
+			<defName>ZVP_Zippo_turretMain</defName>
+			<label>main turret</label>
+			<!-- 砲塔的渲染顯示 -->
+			<graphicData>
+				<texPath>Zippo/turretMain</texPath>
+				<drawSize>(15,15)</drawSize>
+			</graphicData>
+			<!-- 彈藥與裝填容量相關 -->
+			<reloadTimer>5</reloadTimer>
+			<magazineCapacity>60</magazineCapacity>
+			<chargePerAmmoCount>3</chargePerAmmoCount>
+			<genericAmmo>true</genericAmmo>
+			<ammunition>
+				<thingDefs>
+					<li>Steel</li>
+				</thingDefs>
+			</ammunition>
+			<!-- 射程與射界相關 -->
+			<minRange>2.5</minRange>
+			<maxRange>60.9</maxRange>
+			<rotationSpeed>1.5</rotationSpeed>
+			<!-- 射擊相關 -->
+			<warmUpTimer>2</warmUpTimer>
+			<shotSound>GunShotA</shotSound>
+			<reloadSound>Artillery_ShellLoaded</reloadSound>
+			<projectile>ZVP_Bullet_ZippoMain</projectile>
+			<projectileOffset>1.95</projectileOffset>		<!-- 出膛前後偏移，主要是能讓子彈能從炮口飛出去 -->
+			<projectileShifting>							<!-- 出膛左右偏移，多砲管可以根據list來回切 -->
+				<li>0</li>
+			</projectileShifting>
+			<!-- 炮口製退動畫 -->
+			<recoil>
+				<distanceTotal>0.1</distanceTotal>
+				<distancePerTick>0.05</distancePerTick>
+				<speedMultiplierPostRecoil>0.1</speedMultiplierPostRecoil>
+			</recoil>
+			<!-- 射擊模式 -->
+			<fireModes>
+				<li>
+					<shotsPerBurst>4</shotsPerBurst>
+					<ticksBetweenShots>5</ticksBetweenShots>
+					<ticksBetweenBursts>60</ticksBetweenBursts>
+					<label>Burst</label>
+					<texPath>UI/Gizmos/FireRate_Burst</texPath>
+				</li>
+			</fireModes>
+		</Vehicles.VehicleTurretDef>
+	
+		<!-- 主砲的投射物 -->
+		<ThingDef ParentName="BaseBullet">
+			<defName>ZVP_Bullet_ZippoMain</defName>
+			<label>high-explosive shell</label>
+			  <thingClass>Projectile_Explosive</thingClass>
+			<graphicData>
+			  <texPath>Things/Projectile/Bullet_Big</texPath>
+			  <graphicClass>Graphic_Single</graphicClass>
+			  <drawSize>1</drawSize>
+			</graphicData>
+			<projectile>
+				<damageDef>Bomb</damageDef>
+				<damageAmountBase>30</damageAmountBase>
+				<armorPenetrationBase>0.75</armorPenetrationBase>
+				<speed>60</speed>
+				<explosionRadius>1.9</explosionRadius>
+				<soundHitThickRoof>Artillery_HitThickRoof</soundHitThickRoof>
+				<soundExplode>Explosion_GiantBomb</soundExplode>
+				<soundImpactAnticipate>MortarRound_PreImpact</soundImpactAnticipate>
+				<soundAmbient>MortarRound_Ambient</soundAmbient>
+			</projectile>
+		</ThingDef>
+	
+		<!-- 喷火器 -->
+		<Vehicles.VehicleTurretDef ParentName="ZVP_BaseTurret">
+			<defName>ZVP_Zippo_turretFlamethrower</defName>
+			<label>flamethrower</label>
+			<shotSound>ZVP_Sound_Flamethrower</shotSound>
+			<projectile>ZVP_Bullet_ZippoFlamethrower</projectile>
+			<reloadTimer>8</reloadTimer>
+			<warmUpTimer>1.25</warmUpTimer>
+			<magazineCapacity>1</magazineCapacity>
+			<chargePerAmmoCount>5</chargePerAmmoCount>
+			<genericAmmo>true</genericAmmo>
+			<rotationSpeed>3.6</rotationSpeed>
+			<projectileOffset>1</projectileOffset>		<!-- 出膛前後偏移，主要是能讓子彈能從炮口飛出去 -->
+			<projectileShifting>							<!-- 出膛左右偏移，多砲管可以根據list來回切 -->
+				<li>-0.15</li>
+			</projectileShifting>
+			<maxRange>25.9</maxRange>
+			<minRange>2.9</minRange>
+			<fireModes>
+				<li>
+					<shotsPerBurst>1</shotsPerBurst>
+					<ticksBetweenBursts>1</ticksBetweenBursts>
+					<spreadRadius>2.9</spreadRadius>
+					<label>Fire Spew</label>
+					<texPath>UI/Gizmos/FireRate_Single</texPath>
+				</li>
+			</fireModes>
+			<graphicData>
+				<texPath>Zippo/turretFlamethrower</texPath>
+				<drawSize>(15, 15)</drawSize>
+			</graphicData>
+			<ammunition>
+				<thingDefs>
+					<li>Chemfuel</li>
+				</thingDefs>
+			</ammunition>
+		</Vehicles.VehicleTurretDef>
+		
+		<VFECore.ExpandableProjectileDef ParentName="BaseBullet">
+			<defName>ZVP_Bullet_ZippoFlamethrower</defName>
+			<label>spew</label>
+			<thingClass>VFECore.FlamethrowProjectile</thingClass>
+			<graphicData>
+				<texPath>Projectile/Proj_FlameBurn</texPath>
+				<texPathFadeOut>Projectile/Proj_FlameFade</texPathFadeOut>
+				<shaderType>MoteGlow</shaderType>
+			</graphicData>
+			<projectile>
+				<damageDef>Flame</damageDef>
+				<speed>45</speed>
+				<damageAmountBase>5</damageAmountBase>
+			</projectile>
+	
+			<drawOffscreen>true</drawOffscreen>
+			<lifeTimeDuration>120</lifeTimeDuration>
+			<widthScaleFactor>0.65</widthScaleFactor>
+			<heightScaleFactor>1</heightScaleFactor>
+			<startingPositionOffset>(0, 0, -1)</startingPositionOffset>
+			<totalSizeScale>1.15</totalSizeScale>
+			<tickFrameRate>2</tickFrameRate>
+			<finalTickFrameRate>5</finalTickFrameRate>
+			<tickDamageRate>20</tickDamageRate>
+			<dealsDamageOnce>true</dealsDamageOnce>
+			<minDistanceToAffect>2</minDistanceToAffect>
+		</VFECore.ExpandableProjectileDef>
+	
+		<!-- 7.62机枪 -->
+		  <Vehicles.VehicleTurretDef ParentName="ZVP_BaseTurret">
+			<defName>ZVP_Zippo_turretSideMG</defName>
+			<label>7.62mm MG turret</label>
+			<!-- 砲塔的渲染顯示 -->
+			<graphicData>
+				<texPath>Zippo/turretSideMG</texPath>
+				<drawSize>(15,15)</drawSize>
+			</graphicData>
+			<!-- 彈藥與裝填容量相關 -->
+			<reloadTimer>3</reloadTimer>
+			<magazineCapacity>80</magazineCapacity>
+			<chargePerAmmoCount>1</chargePerAmmoCount>
+			<genericAmmo>true</genericAmmo>
+			<ammunition>
+				<thingDefs>
+					<li>Steel</li>
+				</thingDefs>
+			</ammunition>
+			<!-- 射程與射界相關 -->
+			<minRange>2.9</minRange>
+			<maxRange>37.9</maxRange>
+			<rotationSpeed>1.95</rotationSpeed>	
+			<!-- 射擊相關 -->
+			<warmUpTimer>1.5</warmUpTimer>
+			<shotSound>GunShotA</shotSound>
+			<projectile>ZVP_Bullet_ZippoSideMG</projectile>
+			<projectileOffset>0.5</projectileOffset>		<!-- 出膛前後偏移，主要是能讓子彈能從炮口飛出去 -->
+			<projectileShifting>							<!-- 出膛左右偏移，多砲管可以根據list來回切 -->
+				<li>0</li>
+			</projectileShifting>
+			<!-- 炮口製退動畫 -->
+			<recoil>
+				<distanceTotal>0.15</distanceTotal>
+				<distancePerTick>0.05</distancePerTick>
+				<speedMultiplierPostRecoil>0.1</speedMultiplierPostRecoil>
+			</recoil>
+			<!-- 射擊模式 -->
+			<fireModes>
+				<li>
+					<shotsPerBurst>10</shotsPerBurst>
+					<ticksBetweenShots>4</ticksBetweenShots>
+					<ticksBetweenBursts>120</ticksBetweenBursts>
+					<label>Burst</label>
+					<texPath>UI/Gizmos/FireRate_Burst</texPath>
+				</li>
+			</fireModes>
+		</Vehicles.VehicleTurretDef>
+	
+		<ThingDef ParentName="BaseBullet">
+			<defName>ZVP_Bullet_ZippoSideMG</defName>
+			<label>MG bullet</label>
+			<graphicData>
+			  <texPath>Things/Projectile/Bullet_Small</texPath>
+			  <graphicClass>Graphic_Single</graphicClass>
+			</graphicData>
+			<projectile>
+			  <damageDef>Bullet</damageDef>
+			  <damageAmountBase>10</damageAmountBase>
+			  <speed>80</speed>
+			</projectile>
+		  </ThingDef>
+	
+		<!-- 12.7机枪 -->
+		  <Vehicles.VehicleTurretDef ParentName="ZVP_BaseTurret">
+			<defName>ZVP_Zippo_turretBackMG</defName>
+			<label>12.7mm MG turret</label>
+			<!-- 砲塔的渲染顯示 -->
+			<graphicData>
+				<texPath>Zippo/turretBackMG</texPath>
+				<drawSize>(15,15)</drawSize>
+			</graphicData>
+			<!-- 彈藥與裝填容量相關 -->
+			<reloadTimer>4</reloadTimer>
+			<magazineCapacity>80</magazineCapacity>
+			<chargePerAmmoCount>1</chargePerAmmoCount>
+			<genericAmmo>true</genericAmmo>
+			<ammunition>
+				<thingDefs>
+					<li>Steel</li>
+				</thingDefs>
+			</ammunition>
+			<!-- 射程與射界相關 -->
+			<minRange>2</minRange>
+			<maxRange>47.9</maxRange>
+			<rotationSpeed>1.95</rotationSpeed>	
+			<!-- 射擊相關 -->
+			<warmUpTimer>1.5</warmUpTimer>
+			<shotSound>GunShotA</shotSound>
+			<projectile>ZVP_Bullet_ZippoBackMG</projectile>
+			<projectileOffset>1.1</projectileOffset>		<!-- 出膛前後偏移，主要是能讓子彈能從炮口飛出去 -->
+			<projectileShifting>							<!-- 出膛左右偏移，多砲管可以根據list來回切 -->
+				<li>0</li>
+			  </projectileShifting>
+			<!-- 炮口製退動畫 -->
+			<recoil>
+				<distanceTotal>0.15</distanceTotal>
+				<distancePerTick>0.05</distancePerTick>
+				<speedMultiplierPostRecoil>0.1</speedMultiplierPostRecoil>
+			</recoil>
+			<!-- 射擊模式 -->
+			<fireModes>
+				<li>
+					<shotsPerBurst>8</shotsPerBurst>
+					<ticksBetweenShots>4</ticksBetweenShots>
+					<ticksBetweenBursts>80</ticksBetweenBursts>
+					<label>Burst</label>
+					<texPath>UI/Gizmos/FireRate_Burst</texPath>
+				</li>
+			</fireModes>
+		</Vehicles.VehicleTurretDef>
+
+		<ThingDef ParentName="BaseBullet">
+			<defName>ZVP_Bullet_ZippoBackMG</defName>
+			<label>MG bullet</label>
+			<graphicData>
+			  <texPath>Things/Projectile/Bullet_Small</texPath>
+			  <graphicClass>Graphic_Single</graphicClass>
+			</graphicData>
+			<projectile>
+			  <damageDef>Bullet</damageDef>
+			  <damageAmountBase>18</damageAmountBase>
+			  <speed>80</speed>
+			</projectile>
+		  </ThingDef>
+	
+
+		<!-- 后炮塔 -->
+		<Vehicles.VehicleTurretDef ParentName="ZVP_BaseTurret">
+			<defName>ZVP_Zippo_turretAutoCannon</defName>
+			<label>Autocannon turret</label>
+			<!-- 砲塔的渲染顯示 -->
+			<graphicData>
+				<texPath>Zippo/turretAutoCannon</texPath>
+				<drawSize>(15,15)</drawSize>
+			</graphicData>
+			<!-- 彈藥與裝填容量相關 -->
+			<reloadTimer>4</reloadTimer>
+			<magazineCapacity>60</magazineCapacity>
+			<chargePerAmmoCount>2</chargePerAmmoCount>
+			<genericAmmo>true</genericAmmo>
+			<ammunition>
+				<thingDefs>
+					<li>Steel</li>
+				</thingDefs>
+			</ammunition>
+			<!-- 射程與射界相關 -->
+			<minRange>2</minRange>
+			<maxRange>40.9</maxRange>
+			<rotationSpeed>1.95</rotationSpeed>	
+			<!-- 射擊相關 -->
+			<warmUpTimer>1.5</warmUpTimer>
+			<shotSound>GunShotA</shotSound>
+			<projectile>ZVP_Bullet_ZippoAutoCannon</projectile>
+			<projectileOffset>1.4</projectileOffset>		<!-- 出膛前後偏移，主要是能讓子彈能從炮口飛出去 -->
+			<projectileShifting>							<!-- 出膛左右偏移，多砲管可以根據list來回切 -->
+				<li>0</li>
+			</projectileShifting>
+			<!-- 炮口製退動畫 -->
+			<recoil>
+				<distanceTotal>0.15</distanceTotal>
+				<distancePerTick>0.05</distancePerTick>
+				<speedMultiplierPostRecoil>0.1</speedMultiplierPostRecoil>
+			</recoil>
+			<!-- 射擊模式 -->
+			<fireModes>
+				<li>
+					<shotsPerBurst>3</shotsPerBurst>
+					<ticksBetweenShots>5</ticksBetweenShots>
+					<ticksBetweenBursts>60</ticksBetweenBursts>
+					<label>Burst</label>
+					<texPath>UI/Gizmos/FireRate_Burst</texPath>
+				</li>
+			</fireModes>
+		</Vehicles.VehicleTurretDef>
+		<ThingDef ParentName="BaseBullet">
+			<defName>ZVP_Bullet_ZippoAutoCannon</defName>
+			<label>high-explosive shell</label>
+			  <thingClass>Projectile_Explosive</thingClass>
+			<graphicData>
+			  <texPath>Things/Projectile/Bullet_Big</texPath>
+			  <graphicClass>Graphic_Single</graphicClass>
+			  <drawSize>1</drawSize>
+			</graphicData>
+			<projectile>
+				<damageDef>Bomb</damageDef>
+				<damageAmountBase>20</damageAmountBase>
+				<armorPenetrationBase>0.65</armorPenetrationBase>
+				<speed>70</speed>
+				<explosionRadius>1.9</explosionRadius>
+				<soundHitThickRoof>Artillery_HitThickRoof</soundHitThickRoof>
+				<soundExplode>Explosion_GiantBomb</soundExplode>
+				<soundImpactAnticipate>MortarRound_PreImpact</soundImpactAnticipate>
+				<soundAmbient>MortarRound_Ambient</soundAmbient>
+			</projectile>
+		</ThingDef>
+</Defs>
